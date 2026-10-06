@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Trang Chi Tiết Sinh Viên</h2>
+
+    <!-- Thông tin cơ bản: Họ tên, MSSV, Điểm TB, Xếp loại -->
+    <p><strong>Họ tên:</strong> {{ student.name }}</p> <!--[cite: 3] -->
+    <p><strong>MSSV:</strong> {{ student.mssv }}</p> <!--[cite: 3] -->
+    
+    <!-- Lớp: Liên kết về danh sách đã lọc theo lớp đó -->
+    <p>
+        <strong>Lớp:</strong> 
+        <a href="/students?lop={{ student.lop }}">{{ student.lop }}</a> <!--[cite: 3] -->
+    </p>
+
+    <p>
+        <strong>Điểm trung bình:</strong> 
+        {{ student.avg_score if student.avg_score is not none else '-' }} <!--[cite: 3] -->
+    </p>
+    <p><strong>Xếp loại:</strong> {{ student.rank }}</p> <!--[cite: 3] -->
+
+    <h3>Bảng điểm từng học phần</h3> <!--[cite: 3] -->
+    {% if student.scores %}
+        <table border="1" style="border-collapse: collapse; width: 50%;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th>Môn học / Học phần</th>
+                    <th>Điểm</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject, score in student.scores.items() %}
+                    <tr>
+                        <td>{{ subject }}</td>
+                        <td>{{ score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p><em>Chưa có điểm học phần nào.</em></p>
+    {% endif %}
+
+    <br>
+    <a href="/students">← Quay lại danh sách sinh viên</a>
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, abort, redirect
 from student.utils import calculate_student_info
 
 app = Flask(__name__)
@@ -55,6 +55,25 @@ def list_students():
                            students=filtered_students, 
                            classes=all_classes, 
                            selected_lop=selected_lop)
+
+@app.route("/students/<mssv>")
+def student_detail(mssv):
+    if mssv not in STUDENTS:
+        abort(404, description=f"Không có sinh viên với MSSV = {mssv}.")
+    
+    student_info = calculate_student_info(mssv, STUDENTS[mssv])
+    return render_template("student_detail.html", student=student_info)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    message = getattr(e, 'description', 'Trang không tồn tại.')
+    return render_template("404.html", message=message), 404
+
+
+@app.route("/sv/<mssv>")
+def short_student_url(mssv):
+    return redirect(f"/students/{mssv}", code=301)
+
 
 if __name__ == "__main__":
   app.run(debug=True)
