@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect
+import csv
+import io
+from flask import Flask, render_template, request, jsonify, abort, redirect, Response
 from student.utils import calculate_student_info
 
 app = Flask(__name__)
@@ -77,6 +79,35 @@ def search():
                 results.append(student_info)
 
     return render_template("search.html", query=query, results=results)
+
+@app.route("/students/<mssv>/export-csv")
+def export_student_csv(mssv):
+    if mssv not in STUDENTS:
+        abort(404, description=f"Không có sinh viên với MSSV = {mssv}.")
+
+    student = STUDENTS[mssv]
+    
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    output.write('\ufeff')
+
+    writer.writerow(["MSSV", student.get("name"), mssv])
+    writer.writerow(["Lop", student.get("lop")])
+    writer.writerow([])  
+
+    writer.writerow(["Mon hoc / Hoc phan", "Diem"])
+
+    scores = student.get("scores", {})
+    if scores:
+        for subject, score in scores.items():
+            writer.writerow([subject, score])
+    else:
+        writer.writerow(["Chưa có điểm", ""])
+
+    response = Response(output.getvalue(), mimetype="text/csv")
+    response.headers["Content-Disposition"] = f"attachment; filename=bang_diem_{mssv}.csv"
+    return response
 
 @app.errorhandler(404)
 def page_not_found(e):

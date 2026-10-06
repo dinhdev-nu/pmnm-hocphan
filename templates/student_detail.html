@@ -4,23 +4,31 @@
     <h2>Trang Chi Tiết Sinh Viên</h2>
 
     <!-- Thông tin cơ bản: Họ tên, MSSV, Điểm TB, Xếp loại -->
-    <p><strong>Họ tên:</strong> {{ student.name }}</p> <!--[cite: 3] -->
-    <p><strong>MSSV:</strong> {{ student.mssv }}</p> <!--[cite: 3] -->
+    <p><strong>Họ tên:</strong> {{ student.name }}</p>
+    <p><strong>MSSV:</strong> {{ student.mssv }}</p>
     
     <!-- Lớp: Liên kết về danh sách đã lọc theo lớp đó -->
     <p>
         <strong>Lớp:</strong> 
-        <a href="/students?lop={{ student.lop }}">{{ student.lop }}</a> <!--[cite: 3] -->
+        <a href="/students?lop={{ student.lop }}">{{ student.lop }}</a>
     </p>
 
     <p>
         <strong>Điểm trung bình:</strong> 
-        {{ student.avg_score if student.avg_score is not none else '-' }} <!--[cite: 3] -->
+        {{ student.avg_score if student.avg_score is not none else '-' }}
     </p>
-    <p><strong>Xếp loại:</strong> {{ student.rank }}</p> <!--[cite: 3] -->
+    <p><strong>Xếp loại:</strong> {{ student.rank }}</p>
 
-    <h3>Bảng điểm từng học phần</h3> <!--[cite: 3] -->
+    <h3>Bảng điểm từng học phần</h3>
     {% if student.scores %}
+        <!-- Nút Tải về file CSV -->
+        <div style="margin-bottom: 10px;">
+            <a href="/students/{{ student.mssv }}/export-csv" 
+               style="display: inline-block; padding: 8px 16px; background-color: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+               📥 Tải về file CSV
+            </a>
+        </div>
+
         <table border="1" style="border-collapse: collapse; width: 50%;">
             <thead>
                 <tr style="background-color: #f2f2f2;">
