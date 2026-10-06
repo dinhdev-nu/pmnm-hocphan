@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Danh sách Sinh viên</h1>
+
+    <!-- Thanh lọc lớp lấy động từ dữ liệu -->
+    <div class="filter-bar">
+        <strong>Lọc theo lớp: </strong>
+        <a href="/students" class="{% if not selected_lop %}active{% endif %}">Tất cả</a>
+        {% for cls in classes %}
+            <a href="/students?lop={{ cls }}" 
+               class="{% if selected_lop.lower() == cls.lower() %}active{% endif %}">
+               {{ cls }}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>MSSV</th>
+                    <th>Họ tên</th>
+                    <th>Lớp</th>
+                    <th>Điểm TB</th>
+                    <th>Xếp loại</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for std in students %}
+                    <tr>
+                        <!-- MSSV liên kết đến trang chi tiết -->
+                        <td><a href="/students/{{ std.mssv }}">{{ std.mssv }}</a></td>
+                        <td>{{ std.name }}</td>
+                        <td>{{ std.lop }}</td>
+                        <!-- Chưa có điểm: hiển thị dấu - -->
+                        <td>{{ std.avg_score if std.avg_score is not none else '-' }}</td>
+                        <td>{{ std.rank }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <!-- Không có kết quả -->
+        <p style="color: red; margin-top: 20px;">Không có sinh viên phù hợp.</p>
+    {% endif %}
+{% endblock %}

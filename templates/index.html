@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Trang Chủ</h1>
+    <p><strong>Tổng số sinh viên:</strong> {{ total_students }}</p>
+    <p><strong>Số lượng lớp (không trùng):</strong> {{ total_classes }}</p>
+    
+    <h3>Liên kết nhanh:</h3>
+    <ul>
+        <li><a href="/students">Xem danh sách sinh viên (/students)</a></li>
+        <li><a href="/api/students" target="_blank">API danh sách sinh viên (/api/students)</a></li>
+    </ul>
+{% endblock %}
