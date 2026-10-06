@@ -64,6 +64,20 @@ def student_detail(mssv):
     student_info = calculate_student_info(mssv, STUDENTS[mssv])
     return render_template("student_detail.html", student=student_info)
 
+@app.route("/search")
+def search():
+    query = request.args.get("q", "").strip()
+    results = []
+
+    if query:
+        query_lower = query.lower()
+        for mssv, data in STUDENTS.items():
+            if query_lower in data["name"].lower() or query_lower in mssv.lower():
+                student_info = calculate_student_info(mssv, data)
+                results.append(student_info)
+
+    return render_template("search.html", query=query, results=results)
+
 @app.errorhandler(404)
 def page_not_found(e):
     message = getattr(e, 'description', 'Trang không tồn tại.')

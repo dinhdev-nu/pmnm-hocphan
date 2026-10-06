@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Tìm kiếm Sinh viên</h2>
+
+    <form action="/search" method="GET">
+        <input type="text" name="q" value="{{ query }}" placeholder="Nhập tên hoặc MSSV..." style="padding: 6px; width: 250px;">
+        <button type="submit" style="padding: 6px 12px;">Tìm kiếm</button>
+    </form>
+
+    <hr>
+
+    {% if query %}
+        <p><strong>Tìm thấy {{ results|length }} kết quả cho "{{ query }}"</strong></p>
+
+        {% if results %}
+            <ul>
+                {% for std in results %}
+                    <li>
+                        <a href="/students/{{ std.mssv }}">
+                            {{ std.name }} - MSSV: {{ std.mssv }} (Lớp: {{ std.lop }})
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: red;">Không tìm thấy sinh viên phù hợp.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
